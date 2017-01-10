@@ -1,0 +1,41 @@
+<form class="line-graph-form">
+    <p>Построить график динамики курсов валют, используя</p>
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox"> USD
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox"> EURO
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox"> RUB
+                </label>
+            </div>
+        </div>
+        <div class="month-quantity col-xs-6">
+            <div class="radio">
+                <label>
+                    <input type="radio" name="optionsRadios" id="3month" value="3month" checked>
+                    За неделю
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="optionsRadios" id="6month" value="6month">
+                    За 2 недели
+                </label>
+            </div>
+        </div>
+    </div>
+
+
+    <button type="submit" class="btn btn-info create-linear">Построить график</button>
+</form>
+
+<div class="linear-graph"></div>

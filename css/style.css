@@ -1,0 +1,49 @@
+.control-buttons{
+    margin-top: 20px;
+}
+.currency-table th, .currency-table td{
+    width: 50%;
+}
+.column-graph{
+    text-align: center;
+    padding: 20px;
+}
+.column-graph .item{
+    margin: 5px;
+    font-size: 15px;
+    min-height: 25px;
+    min-width: 20px;
+    display: inline-block;
+    vertical-align: bottom;
+}
+.column-graph .cg-data {
+    background-color: steelblue;
+    text-align: right;
+    color: #f0f8ff;
+    display:inline-block;
+}
+.column-graph .name{
+    display:inline-block;
+    margin-left:5px;
+}
+
+form.line-graph-form{
+    margin: 30px 0;
+}
+
+
+.axis path, .axis line {
+    fill: none;
+    stroke: #333;
+}
+.axis .grid-line {
+    stroke: #000;
+    stroke-opacity: 0.2;
+}
+.axis text {
+    font: 10px Arial;
+}
+
+.dynamic-content{
+    margin: 50px 0;
+}
