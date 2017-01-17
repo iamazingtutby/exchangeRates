@@ -1,46 +1,10 @@
-(function ($) {
-    var usdUrl = 'http://www.nbrb.by/API/ExRates/Rates/145';
-    var rubUrl = 'http://www.nbrb.by/API/ExRates/Rates/298';
-    var eurUrl = 'http://www.nbrb.by/API/ExRates/Rates/292';
-    var _data = [],
+function CreateTablePage() {
+
+    var threeStatic = [],
         curIds = [145,298,292];
-
-    var threeStatic = [];
-
-    $(document).on('click', function () {
-
-        
-
-        function getCurrencies() {
-            var _today = new Date();
-            var todayDateFormat = _today.getFullYear() + '/' + (_today.getMonth()+1) + '/' + _today.getDate();
-
-            var threeMonthAgoDate = new Date();
-            threeMonthAgoDate.setMonth(threeMonthAgoDate.getMonth() - 2); // отнимаем "2" - тк, иначе потом прибавлять 1 к месяцу
-            var threeMonthAgoDateFormat = threeMonthAgoDate.getFullYear() + '/' + threeMonthAgoDate.getMonth() + '/' + threeMonthAgoDate.getDate();
-
-            var oneWeekAgoDate = new Date();
-            oneWeekAgoDate.setDate(oneWeekAgoDate.getDate() - 6); // отнимаем "6" - тк, иначе потом прибавлять 1 к неделе
-            var oneWeekAgoDateFormat = oneWeekAgoDate.getFullYear() + '/' + (oneWeekAgoDate.getMonth()+1) + '/' + oneWeekAgoDate.getDate();
-
-            console.log('oneWeekAgoDate', oneWeekAgoDate);
-            console.log('oneWeekAgoDateFormat', oneWeekAgoDateFormat);
-            var twoWeekAgoDate = new Date();
-            twoWeekAgoDate.setDate(twoWeekAgoDate.getDate() - 13); // отнимаем "13" - тк, иначе потом прибавлять 1 к неделе
-            var twoWeekAgoDateFormat = twoWeekAgoDate.getFullYear() + '/' + (twoWeekAgoDate.getMonth()+1) + '/' + twoWeekAgoDate.getDate();
-
-            console.log('twoWeekAgoDate', twoWeekAgoDate);
-            console.log('twoWeekAgoDateFormat', twoWeekAgoDateFormat);
-
-            var sixMonthAgoDate = new Date();
-            sixMonthAgoDate.setMonth(sixMonthAgoDate.getMonth() - 5); // отнимаем "5" - тк, иначе потом прибавлять 1 к месяцу
-            var sixMonthAgoDateFormat = sixMonthAgoDate.getFullYear() + '-' + sixMonthAgoDate.getMonth() + '-' + sixMonthAgoDate.getDate();
-
-            // console.log('threeMonthAgoDate ', threeMonthAgoDate);
-            console.log('threeMonthAgoDate ', threeMonthAgoDateFormat);
-
-            // console.log('sixMonthAgoDate ', sixMonthAgoDate);
-            console.log('sixMonthAgoDate ', sixMonthAgoDateFormat);
+    
+    this.getThreeData = function () {
+            threeStatic.length = 0;
 
             for(var i=0; i<curIds.length; i++){
                 var reqUrl = 'http://www.nbrb.by/API/ExRates/Rates/' + curIds[i];
@@ -56,165 +20,110 @@
                     }
                 });
             }
-            console.log('threeStatic ', threeStatic);
 
-
-            // get EURO dynamic for the three month ---- oneWeek !!
-            $.getJSON("http://www.nbrb.by/API/ExRates/Rates/Dynamics/292?startDate="+twoWeekAgoDateFormat+"&endDate="+todayDateFormat+"",
-                function (data) {
-                    // console.log('get EURO dynamic for the three month ', data);
-                    _euro3 = data;
-                });
-            // get USD dynamic for the three month ---- oneWeek !!
-            $.getJSON(
-                "http://www.nbrb.by/API/ExRates/Rates/Dynamics/145?startDate="+twoWeekAgoDateFormat+"&endDate="+todayDateFormat+"",
-                function (data) {
-                    console.log('get USD dynamic for the three month ', data);
-                    _usd3 = data;
-                });
-            // get RUB dynamic for the three month ---- oneWeek !!
-            $.getJSON("http://www.nbrb.by/API/ExRates/Rates/Dynamics/298?startDate="+twoWeekAgoDateFormat+"&endDate="+todayDateFormat+"",
-                function (data) {
-                    // console.log('get RUB dynamic for the three month ', data);
-                    _rub3 = data;
-                });
-            // // get EURO dynamic for the six month
-            // $.getJSON("http://www.nbrb.by/API/ExRates/Rates/Dynamics/292?startDate="+sixMonthAgoDateFormat+"&endDate="+todayDateFormat+"",
-            //     function (data) {
-            //         // console.log('get EURO dynamic for the six month ', data);
-            //         _euro6 = data;
-            //     });
-            // // get USD dynamic for the six month
-            // $.getJSON("http://www.nbrb.by/API/ExRates/Rates/Dynamics/145?startDate="+sixMonthAgoDateFormat+"&endDate="+todayDateFormat+"",
-            //     function (data) {
-            //         // console.log('get USD dynamic for the six month ', data);
-            //         _usd6 = data;
-            //     });
-            // // get RUB dynamic for the six month
-            // $.getJSON("http://www.nbrb.by/API/ExRates/Rates/Dynamics/298?startDate="+sixMonthAgoDateFormat+"&endDate="+todayDateFormat+"",
-            //     function (data) {
-            //         // console.log('get RUB dynamic for the six month ', data);
-            //         _rub6 = data;
-            //     });
-
+        console.log('threeStatic ', threeStatic);
+    };
+    this.createTable = function (tpl, par) {
+        par.html('');
+        for(var i=0; i<tpl.length; i++){
+            var tag = tpl[i].tag;
+            var elem = $("<" + tag + ">");
+            par.append(elem);
+            if('options' in tpl[i]){
+                if('attributes' in tpl[i]['options']){
+                    var _arr = tpl[i]['options']['attributes'];
+                    for(var key in _arr)
+                        elem.attr(key , _arr[key])
+                }
+                if('children' in tpl[i]['options']){
+                    this.createTable(tpl[i]['options']['children'], elem)
+                }
+                if('text' in tpl[i]['options']){
+                    elem.text(tpl[i]['options'].text);
+                }
+            }
         }
-        getCurrencies();
+    };
+    this.staticTable = function () {
+        $('.preloader').show();
+        this.getThreeData();
 
+            var tableTpl = [
+                {
+                    tag: 'table', options: {
+                    attributes: {id: 'curTable', class: 'table table-bordered currency-table'}, children: [
+                        {
+                            tag: 'thead', options: {
+                            children: [
+                                {
+                                    tag: 'tr', options: {
+                                    children: [
+                                        {
+                                            tag: 'th',
+                                            options: {attributes: {class: 'first'}, text: 'Валюта'}
+                                        },
+                                        {tag: 'th', options: {attributes: {class: 'second'}, text: 'Курс'}}
+                                    ]
+                                }
+                                }
+                            ]
+                        }
+                        },
+                        {
+                            tag: 'tbody'
+                        }
+                    ]
+                }
+                }
+            ];
 
-        $('.btns-row .btn').each(function () {
-            $(this).on('click', function () {
+            var par = $('.table-data');
+            this.createTable(tableTpl, par);
 
+        function fillThree(){
+            if(threeStatic.length == 3){
+                for(var j=0; j<threeStatic.length; j++){
+                    $('#curTable').find('tbody')
+                        .append('<tr><td>'+threeStatic[j].Cur_Scale+' '+threeStatic[j].Cur_Name+'</td><td>'+threeStatic[j].Cur_OfficialRate +' бел.руб</td></tr>');
+                }
+                console.log('filled');
+            } else {
+                setTimeout(fillThree, 300);
+            }
+        }
+        setTimeout(fillThree, 300);
+
+        $('.preloader').fadeOut();
+    };
+    
+    this.dynamicTable = function () {
+       var _btn = $('.t-btns-row .btn');
+            _btn.on('click', function () {
+
+                $('.preloader').show();
                 var currentBtn = $(this).data('cur');
-                var requestUrl;
-
-                // console.log('this', $(this).data('cur'));
+                var _from = $('input.date-from').val(),
+                    _to = $('input.date-to').val(),
+                    _id;
 
                 switch (currentBtn){
                     case ('rub'):
-                        requestUrl = rubUrl;
-                        getOneCurrency();
+                        _id = 298; // id рос рубля
+                        getOneCurrency(_from, _to, _id);
                         break;
                     case ('usd'):
-                        requestUrl = usdUrl;
-                        getOneCurrency();
+                        _id = 145; // id usd
+                        getOneCurrency(_from, _to, _id);
                         break;
                     case ('eur'):
-                        requestUrl = eurUrl;
-                        getOneCurrency();
+                        _id = 292; // id euro
+                        getOneCurrency(_from, _to, _id);
                         break;
-                    case ('all'):
-                        getThreeCurrencies();
-                        return false;
                 }
 
-                function getThreeCurrencies() {
+                function getOneCurrency(_from, _to, _id) {
+                    var requestUrl = "http://www.nbrb.by/API/ExRates/Rates/Dynamics/"+_id+"?startDate="+_from+"&endDate="+_to+"";
 
-                    // function getData() {
-                    //     for(var i=0; i<curIds.length; i++){
-                    //         var reqUrl = 'http://www.nbrb.by/API/ExRates/Rates/' + curIds[i];
-                    //         $.ajax({
-                    //             url: reqUrl,
-                    //             type: 'GET',
-                    //             cache: false,
-                    //             success: function (data) {
-                    //                 _data.push(data);
-                    //             },
-                    //             error: function () {
-                    //                 alert('Error');
-                    //             }
-                    //         });
-                    //     }
-                    // }
-                    // getData();
-                    console.log('_data ', threeStatic);
-                    function fillTable() {
-                        // console.log('_data1 ', threeStatic);
-                        var tableTpl = [
-                            {
-                                tag: 'table', options: {
-                                attributes: {id: 'curTable', class: 'table table-bordered currency-table'}, children: [
-                                    {
-                                        tag: 'thead', options: {
-                                        children: [
-                                            {
-                                                tag: 'tr', options: {
-                                                children: [
-                                                    {
-                                                        tag: 'th',
-                                                        options: {attributes: {class: 'first'}, text: 'Валюта'}
-                                                    },
-                                                    {tag: 'th', options: {attributes: {class: 'second'}, text: 'Курс'}}
-                                                ]
-                                            }
-                                            }
-                                        ]
-                                    }
-                                    },
-                                    {
-                                        tag: 'tbody'
-                                    }
-                                ]
-                            }
-                            }
-                        ];
-                        function createTable(tpl, par) {
-                            par.html('');
-                            for(var i=0; i<tpl.length; i++){
-                                var tag = tpl[i].tag;
-                                var elem = $("<" + tag + ">");
-                                par.append(elem);
-                                if('options' in tpl[i]){
-                                    if('attributes' in tpl[i]['options']){
-                                        var _arr = tpl[i]['options']['attributes'];
-                                        for(var key in _arr)
-                                            elem.attr(key , _arr[key])
-                                    }
-                                    if('children' in tpl[i]['options']){
-                                        createTable(tpl[i]['options']['children'], elem)
-                                    }
-                                    if('text' in tpl[i]['options']){
-                                        elem.text(tpl[i]['options'].text);
-                                    }
-                                }
-                            }
-                        }
-
-                        var par = $('.table-data');
-                        createTable(tableTpl, par);
-
-
-                        for(var j=0; j<threeStatic.length; j++){
-                            $('#curTable').find('tbody')
-                                .append('<tr><td>'+threeStatic[j].Cur_Scale+' '+threeStatic[j].Cur_Name+'</td><td>'+threeStatic[j].Cur_OfficialRate +' бел.руб</td></tr>');
-                        }
-
-
-                    }
-                    fillTable();
-
-                }
-
-                function getOneCurrency() {
                     $.ajax({
                         url: requestUrl,
                         type: 'GET',
@@ -232,19 +141,16 @@
                             {tag: 'table', options: {attributes: {id: 'curTable', class: 'table table-bordered currency-table'}, children: [
                                 {tag: 'thead', options: { children: [
                                     {tag: 'tr', options: { children: [
-                                        {tag: 'th', options: {attributes: {class: 'first'}, text: 'Валюта'}},
+                                        {tag: 'th', options: {attributes: {class: 'first'}, text: 'Дата'}},
+                                        {tag: 'th', options: {attributes: {class: 'second'}, text: 'Валюта'}},
                                         {tag: 'th', options: {attributes: {class: 'second'}, text: 'Курс'}}
                                     ]}}
                                 ]}},
-                                {tag: 'tbody', options: { children: [
-                                    {tag: 'tr', options: { children: [
-                                        {tag: 'td', options: {attributes: {class: 'first'}, text: data.Cur_Scale +' '+ data.Cur_Name}},
-                                        {tag: 'td', options: {attributes: {class: 'second'}, text: data.Cur_OfficialRate +' бел.руб'}}
-                                    ]}}
-                                ]}}
+                                {
+                                    tag: 'tbody'
+                                }
                             ]}}
                         ];
-
                         function createTable(tpl, par) {
                             par.html('');
                             for(var i=0; i<tpl.length; i++){
@@ -267,18 +173,58 @@
                             }
                         }
 
-                        var par = $('.table-data');
+                        var par = $('.d-table-data');
                         createTable(tableTpl, par);
+
+                        function fillAll(){
+                            if(data){
+                                for(var j=0; j<data.length; j++){
+                                    var name;
+                                    switch (data[j].Cur_ID){
+                                        case (145):
+                                            name = '1 Доллар США';
+                                            break;
+                                        case (292):
+                                            name = '1 Евро';
+                                            break;
+                                        case (298):
+                                            name = '100 Российских рублей';
+                                            break;
+                                    }
+
+                                    var __date = new Date(data[j].Date);
+
+                                    var dd = __date.getDate();
+                                    if (dd < 10) {dd = '0' + dd}
+
+                                    var mm = __date.getMonth();
+
+                                    function monthName(mm) {
+                                        var _names = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+                                        return _names[mm];
+                                    }
+
+                                    var _date = dd + ' ' + monthName(mm) + ' ' + __date.getFullYear();
+                                    $('.d-table-data #curTable').find('tbody')
+                                        .append('<tr><td>'+_date+'</td><td>'+name+'</td><td>'+data[j].Cur_OfficialRate+' бел.руб</td></tr>');
+                                }
+                                console.log('filled all');
+                            } else {
+                                setTimeout( fillAll , 300);
+                            }
+                        }
+                        setTimeout( fillAll , 300);
 
                     }
                 }
 
+                $('.preloader').fadeOut();
             });
-        });
-    });
-
-    // $(document).ajax('suucess', function () {
-    //
-    // })
-
-})(jQuery);
+    };
+    
+    this.init = function () {
+        this.staticTable();
+        this.dynamicTable();
+    }
+    
+}
