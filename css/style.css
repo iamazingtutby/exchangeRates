@@ -1,9 +1,36 @@
+/* index */
 .control-buttons{
     margin-top: 20px;
 }
-.currency-table th, .currency-table td{
-    width: 50%;
+.dynamic-content{
+    margin: 50px 0;
 }
+
+/* datepicker */
+input.datepicker{
+    width: 90px;
+    text-align: center;
+}
+
+/*table*/
+.table-data, .d-table-data{
+    margin: 15px 0;
+}
+
+/*svg graph*/
+.axis path, .axis line {
+    fill: none;
+    stroke: #333;
+}
+.axis .grid-line {
+    stroke: #000;
+    stroke-opacity: 0.2;
+}
+.axis text {
+    font: 10px Arial;
+}
+
+/* column */
 .column-graph{
     text-align: center;
     padding: 20px;
@@ -26,24 +53,41 @@
     display:inline-block;
     margin-left:5px;
 }
+.column-graph .text{
+    display: block;
+    width: 50px;
+}
 
-form.line-graph-form{
+/* linear */
+.line-graph-form{
     margin: 30px 0;
 }
-
-
-.axis path, .axis line {
-    fill: none;
-    stroke: #333;
+.g_wrap .text{
+    display: none;
 }
-.axis .grid-line {
-    stroke: #000;
-    stroke-opacity: 0.2;
+.g_wrap .dot{
+    cursor: pointer;
 }
-.axis text {
-    font: 10px Arial;
+.g_wrap .dot:hover + .text{
+    display: block;
 }
 
-.dynamic-content{
-    margin: 50px 0;
+
+/* preloader */
+.preloader{
+    display: none;
+    position: fixed;
+    width: 100%;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: rgba(255,255,255,0.9);
+}
+.preloader img{
+    display: block;
+    position: absolute;
+    left: 50%;
+    margin-left: -40px;
+    top: 50%;
+    margin-top: -40px;
 }
